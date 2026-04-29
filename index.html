@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Video Game - Level 1</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://www.youtube.com/iframe_api" async></script>
+    <!-- <script src="https://www.youtube.com/iframe_api"></script> -->
+     
+    <script src="game.js" defer></script>
+</head>
+<!-- This is a single-line comment -->
+<body>
+
+    <div id="game-wrapper">
+        <header>
+            <h1>Mission: The Choice</h1>
+            <div id="status-bar">Health: <span id="health">100</span>%</div>
+        </header>
+
+        <div id="player-container">
+            <div id="player"></div>
+        </div>
+
+        <div id="ui-overlay" class="hidden">
+            <h2>What is your next move?</h2>
+            <div class="button-group">
+                <button id="btn-left" class="game-btn" onclick="handleChoice('left')">
+                    Enter the Lab
+                </button>
+                <button id="btn-right" class="game-btn" onclick="handleChoice('right')">
+                    Secure the Perimeter
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

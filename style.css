@@ -1,0 +1,50 @@
+body {
+    background-color: #1a1a1a;
+    color: #00ff99;
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+#game-wrapper {
+    max-width: 800px;
+    text-align: center;
+}
+
+/* Ensure the ID styling doesn't override the visibility toggle */
+/* #ui-overlay {
+    display: block; /* Default state when visible */
+} */
+
+#ui-overlay {
+    position: relative; /* or absolute if you want it to float over the video */
+    z-index: 10;        /* Higher numbers sit "closer" to the user */
+    background: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+    padding: 20px;
+    margin-top: -100px; /* Pulls it up over the bottom of the video */
+}
+
+#ui-overlay.hidden {
+    display: none !important; /* Forces it to stay hidden until the class is removed */
+}
+
+.hidden { display: none; }
+/*.hidden { display: inline; }*/
+
+
+.game-btn {
+    background-color: #333;
+    color: #00ff99;
+    border: 2px solid #00ff99;
+    padding: 15px 30px;
+    margin: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.game-btn:hover {
+    background-color: #00ff99;
+    color: #1a1a1a;
+}

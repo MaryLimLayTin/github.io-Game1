@@ -10,11 +10,28 @@
 
     <script src="https://www.youtube.com/iframe_api" async></script>
     <!-- <script src="https://www.youtube.com/iframe_api"></script> -->
-     
+
     <script src="game.js" defer></script>
 </head>
 <!-- This is a single-line comment -->
 <body>
+
+<div id="menu-icon" onclick="toggleMenu()">&#9776; Game Menu</div>
+
+<div id="side-menu" class="side-menu">
+    <a href="javascript:void(0)" class="closebtn" onclick="toggleMenu()">&times;</a>
+    <h3>Chapters</h3>
+    <a href="#" onclick="jumpToScene('start')">The Beginning</a>
+    <a href="#" onclick="jumpToScene('lab')">The Laboratory</a>
+    <a href="#" onclick="jumpToScene('secure')">Security Wing</a>
+    <hr>
+    
+    <h3>Mission Progress</h3>
+    <ul id="inventory-list" style="list-style: none; padding-left: 20px;">
+        <li id="item-keycard" style="color: #555;">[ ] Lab Keycard</li>
+        <li id="item-data" style="color: #555;">[ ] Encrypted Data</li>
+    </ul>
+</div>
 
     <div id="game-wrapper">
         <header>

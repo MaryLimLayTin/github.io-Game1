@@ -19,7 +19,9 @@ body {
     transition: 0.5s; /* Smooth sliding effect */
     padding-top: 60px;
     color: white;
+    overflow-x: hidden; /* This is the secret to a clean slide */
 }
+
 
 .side-menu a {
     padding: 8px 8px 8px 32px;

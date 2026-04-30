@@ -98,6 +98,24 @@ function toggleMenu() {
     }
 }
 
+// Function to draw the sidebar based on current state
+function renderSidebar() {
+    const list = document.getElementById('inventory-list');
+    if (!list) return;
+
+    list.innerHTML = ""; // Clear any "ghost" content
+
+    hiddenItems.forEach(item => {
+        const isFound = gameState[item.id];
+        const status = isFound ? "[\u2713]" : "[ ]";
+        const color = isFound ? "#27ae60" : "#555";
+        
+        list.innerHTML += `<li style="color: ${color}; white-space: nowrap;">${status} ${item.name}</li>`;
+    });
+}
+
+// Call it immediately so the menu is ready before the user clicks the hamburger
+renderSidebar();
 
 // Function to Jump to a New Video from the Menu
 function jumpToScene(sceneType) {
@@ -139,12 +157,13 @@ function handleGameEvent(type, value, nextVideoId) {
     }
 }
 
+/*
 function collectItem(itemId, itemName) {
     // Briefly flash the menu icon green to show success without opening the whole menu
     const icon = document.getElementById('menu-icon');
     icon.style.backgroundColor = "#27ae60";
     setTimeout(() => { icon.style.backgroundColor = "rgba(0,0,0,0.5)"; }, 2000);
-    
+
     // 1. Update the Game State
     gameState[itemId] = true;
 
@@ -165,6 +184,18 @@ function collectItem(itemId, itemName) {
     
     console.log("Collected: " + itemName);
 }
+*/
+
+function collectItem(itemId, itemName) {
+    gameState[itemId] = true;
+    
+    renderSidebar(); // Redraw the list with the new checkmark
+    
+    document.getElementById('ui-overlay').classList.add('hidden');
+    // Optional: close menu if it was open
+    document.getElementById("side-menu").style.width = "0";
+}
+
 
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {

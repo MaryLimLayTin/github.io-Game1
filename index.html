@@ -39,22 +39,22 @@
             <div id="status-bar">Health: <span id="health">100</span>%</div>
         </header>
 
+    
         <div id="player-container">
+            <!-- The YouTube Player  (The bottom layer)  -->
             <div id="player"></div>
-        </div>
+        
+            <!-- The Overlay (The "Transparent Layer" on top) -->
+            <div id="ui-overlay" class="hidden">
 
-        <div id="ui-overlay" class="hidden">
-            <h2>What is your next move?</h2>
-            <div class="button-group">
-                <button id="btn-left" class="game-btn" onclick="handleChoice('left')">
-                    Enter the Lab
-                </button>
-                <button id="btn-right" class="game-btn" onclick="handleChoice('right')">
-                    Secure the Perimeter
-                </button>
+                <button onclick="handleGameEvent('Lab Path', 'keycard', 'lYg02bByXB8')">Go to Lab</button>
+                <button onclick="handleGameEvent('Perimeter Path', 'data', 'lYg02bByXB8')">Go to Perimeter</button>
+
             </div>
         </div>
+
     </div>
+
 
 </body>
 

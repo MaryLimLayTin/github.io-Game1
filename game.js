@@ -31,6 +31,48 @@ const gameData = {
     }
 };
 
+// 1. Define the items hidden in the video
+const hiddenItems = [
+    { name: 'Keycard', timeStart: 10, timeEnd: 15, id: 'item-keycard' },
+    { name: 'Data Disk', timeStart: 45, timeEnd: 50, id: 'item-data' }
+];
+
+
+// 2. The "Stopwatch" function
+function monitorVideoItems() {
+    if (player && player.getCurrentTime) {
+        let now = player.getCurrentTime();
+        let foundSomething = false;
+
+        hiddenItems.forEach(item => {
+            // Sense if we are inside the specific time window for this item
+            if (now >= item.timeStart && now <= item.timeEnd && !gameState[item.id]) {
+                showCollectionButton(item);
+                foundSomething = true;
+            }
+        });
+
+        // CRITICAL: If no items match the current time, clear the screen
+        if (!foundSomething) {
+            const overlay = document.getElementById('ui-overlay');
+            // We only hide it if it doesn't contain the "Choice" buttons (toLab/toPerimeter)
+            if (!overlay.innerHTML.includes('to Lab')) { 
+                overlay.classList.add('hidden');
+            }
+        }
+    }
+}
+
+// 3. Update UI
+function showCollectionButton(item) {
+    const overlay = document.getElementById('ui-overlay');
+    overlay.innerHTML = `<button onclick="collectItem('${item.id}', '${item.name}')">Collect ${item.name}</button>`;
+    overlay.classList.remove('hidden');
+}
+
+// Check the time every 500ms
+setInterval(monitorVideoItems, 500);
+
 // Toggle the Sidebar
 function toggleMenu() {
     const menu = document.getElementById("side-menu");
@@ -40,6 +82,7 @@ function toggleMenu() {
         menu.style.width = "250px";
     }
 }
+
 
 // Function to Jump to a New Video from the Menu
 function jumpToScene(sceneType) {
@@ -57,47 +100,50 @@ function jumpToScene(sceneType) {
     document.getElementById('ui-overlay').classList.add('hidden');
 }
 
-// 1. This function is called by the YouTube API automatically
-/*function onYouTubeIframeAPIReady() {
-    player = new YT.Player('player', {
-        height: '360',
-        width: '640',
-        videoId: 'lYg02bByXB8', // Replace with your starting Video ID
-        events: {
-            'onStateChange': onPlayerStateChange
-        }
-    });
-}*/
 
-/*
-function pickChoice(choice) {
-    if (choice === 'lab') {
-        player.loadVideoById(NEW_VIDEO_ID); // Load the next part
-        
-        // UNLOCK ITEM IN SIDE MENU
-        const keycard = document.getElementById('item-keycard');
-        keycard.innerHTML = "[\u2713] Lab Keycard"; // Adds a checkmark
-        keycard.style.color = "#27ae60"; // Turns it green
+function handleGameEvent(type, value, nextVideoId) {
+    // 1. Update the Internal State
+    gameState[value] = true;
+
+    // 2. Update the Sidebar UI
+    const sidebarItem = document.getElementById(`item-${value}`);
+    if (sidebarItem) {
+        sidebarItem.innerHTML = `[\u2713] ${type}`;
+        sidebarItem.style.color = "#27ae60";
     }
-    
-    // Always hide the overlay after a choice is made
+
+    // 3. Close the Sidebar (if it was open)
+    document.getElementById("side-menu").style.width = "0";
+
+    // 4. Hide the Overlay immediately
     document.getElementById('ui-overlay').classList.add('hidden');
-}*/
 
-function pickChoice(choice) {
-    if (choice === 'lab') {
-        gameState.hasKeycard = true; // Update the state
-        
-        // Update Sidebar UI
-        const item = document.getElementById('item-keycard');
-        item.innerHTML = "[\u2713] Lab Keycard";
-        item.style.color = "#27ae60";
-
-        // Optional: Load a "Success" video clip
-        player.loadVideoById(SUCCESS_VIDEO_ID);
+    // 5. Change the Video (if a new ID is provided)
+    if (nextVideoId) {
+        player.loadVideoById(nextVideoId);
     }
-    
+}
+
+function collectItem(itemId, itemName) {
+    // 1. Update the Game State
+    gameState[itemId] = true;
+
+    // 2. Update the Sidebar UI (Checkmark)
+    const sidebarItem = document.getElementById(itemId);
+    if (sidebarItem) {
+        sidebarItem.innerHTML = `[\u2713] ${itemName}`;
+        sidebarItem.style.color = "#27ae60";
+    }
+
+    // 3. AUTO-CLOSE THE SIDE MENU
+    // If the sidebar is open, this snaps it shut so the player can see the video
+    document.getElementById("side-menu").style.width = "0";
+
+    // 4. HIDE THE BUTTON
+    // This removes the button immediately so they can't click it twice
     document.getElementById('ui-overlay').classList.add('hidden');
+    
+    console.log("Collected: " + itemName);
 }
 
 function onYouTubeIframeAPIReady() {
@@ -165,3 +211,21 @@ function handleChoice(path) {
         player.loadVideoById(VIDEO_ID_FOR_PERIMETER); // Replace with actual ID
     }
 }
+
+// Run this function repeatedly to check the video time
+function trackVideoProgress() {
+    if (player && player.getCurrentTime) {
+        let currentTime = player.getCurrentTime();
+
+        // SENSING LOGIC: 
+        // If video is between 15 and 20 seconds, show the "Keycard" button
+        if (currentTime >= 15 && currentTime <= 20 && !gameState.hasKeycard) {
+            document.getElementById('ui-overlay').classList.remove('hidden');
+        } else {
+            document.getElementById('ui-overlay').classList.add('hidden');
+        }
+    }
+}
+
+// Check every 500ms (twice a second) for better accuracy
+//setInterval(trackVideoProgress, 500);

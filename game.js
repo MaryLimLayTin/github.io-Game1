@@ -71,7 +71,22 @@ function showCollectionButton(item) {
 }
 
 // Check the time every 500ms
-setInterval(monitorVideoItems, 500);
+//setInterval(monitorVideoItems, 500);
+// In your game.js
+setInterval(monitorVideoItems, 100); // Checks 10 times per second
+
+function updateSidebarUI() {
+    const list = document.getElementById('inventory-list');
+    list.innerHTML = ''; // Clear everything first
+
+    hiddenItems.forEach(item => {
+        const isFound = gameState[item.id];
+        const status = isFound ? "[\u2713]" : "[ ]";
+        const color = isFound ? "#27ae60" : "#555";
+        
+        list.innerHTML += `<li style="color: ${color}">${status} ${item.name}</li>`;
+    });
+}
 
 // Toggle the Sidebar
 function toggleMenu() {
@@ -125,6 +140,11 @@ function handleGameEvent(type, value, nextVideoId) {
 }
 
 function collectItem(itemId, itemName) {
+    // Briefly flash the menu icon green to show success without opening the whole menu
+    const icon = document.getElementById('menu-icon');
+    icon.style.backgroundColor = "#27ae60";
+    setTimeout(() => { icon.style.backgroundColor = "rgba(0,0,0,0.5)"; }, 2000);
+    
     // 1. Update the Game State
     gameState[itemId] = true;
 

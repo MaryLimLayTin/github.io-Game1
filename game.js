@@ -11,6 +11,9 @@ const VIDEO_ID_FOR_PERIMETER = ''
 const VIDEO_ID_1 = ''
 const VIDEO_ID_2 = 'o_85aRHS_eY'
 const VIDEO_ID_HERE = 'lYg02bByXB8'
+const VIDEO_ID_BEGIN = 'lYg02bByXB8'
+const VIDEO_ID_LAB = 'lYg02bByXB8'
+const VIDEO_ID_SECURE = 'dQAGx9goPfk'
 const NEW_VIDEO_ID = 'XM0GbrwbQAo'
 const SUCCESS_VIDEO_ID = 'B9yuJD3fwO4'
 
@@ -125,6 +128,7 @@ function jumpToScene(sceneType) {
     
     if (sceneType === 'start') nextVideoId = 'dQw4w9WgXcQ';
     if (sceneType === 'lab') nextVideoId = VIDEO_ID_HERE;
+    if (sceneType === 'secure') nextVideoId = VIDEO_ID_SECURE;
     
     // Use the global 'player' object we created earlier
     player.loadVideoById(nextVideoId);
